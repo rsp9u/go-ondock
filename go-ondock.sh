@@ -10,5 +10,6 @@ if [ $(docker ps --filter=name=${NAME} | wc -l) -lt 2 ]; then
   fi
   docker run -tid --rm --name ${NAME} -v /tmp:/tmp -v $PWD:$PWD local/golang:${GOVERSION}-alpine /bin/ash > /dev/null 2>&1
 fi
+goenv=$(env | grep "^GO")
 cmd="cd $PWD && $(basename $0) $@"
-docker exec -i ${NAME} /bin/ash -c "${cmd}"
+docker exec -i -e ${goenv} ${NAME} /bin/ash -c "${cmd}"
