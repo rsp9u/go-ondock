@@ -18,8 +18,8 @@ if [ $(docker ps --filter=name=${NAME} | wc -l) -lt 2 ]; then
   fi
   host_gopath=$(search_host_gopath)
   if [ "${host_gopath}" = "" ]; then
-    echo "Not found anything that looks like GOPATH on the host."
-    echo "You must make the directory located '~/go' or '/go'."
+    >&2 echo "Not found anything that looks like GOPATH on the host."
+    >&2 echo "You must make the directory located '~/go' or '/go'."
     exit 1
   fi
   docker run -tid --rm --name ${NAME} -v /tmp:/tmp -v ${host_gopath}/src:/go/src local/golang:${GOVERSION}-alpine /bin/ash > /dev/null 2>&1
