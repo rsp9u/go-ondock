@@ -25,10 +25,10 @@ if [ $(docker ps --filter=name=${NAME} | wc -l) -lt 2 ]; then
   docker run -tid --rm --name ${NAME} -v /tmp:/tmp -v ${host_gopath}:/go local/golang:${GOVERSION}-alpine /bin/ash > /dev/null 2>&1
 fi
 user=$(id -u):$(id -g)
-goenv=$(env | grep "^GO")
+goenv=$(env | grep "^GO" | sed -e 's/^/-e /')
 cmd="cd $(pwd | sed -e "s,$HOME,,g") && $(basename $0) $@"
 if [ "${goenv}" = "" ];then
   docker exec -i -u ${user} ${NAME} /bin/ash -c "${cmd}"
 else
-  docker exec -i -u ${user} -e ${goenv} ${NAME} /bin/ash -c "${cmd}"
+  docker exec -i -u ${user} ${goenv} ${NAME} /bin/ash -c "${cmd}"
 fi
