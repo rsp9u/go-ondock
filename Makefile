@@ -1,7 +1,7 @@
 dest := /usr/local/bin
 script := go-ondock.sh
 symlinks := $(dest)/go $(dest)/gofmt $(dest)/golint
-goversion := 1.12
+goversion := 1.13
 files := $(dest)/$(script) $(symlinks)
 
 $(dest)/$(script):
