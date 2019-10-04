@@ -22,8 +22,20 @@ if [ $(docker ps --filter=name=${NAME} | wc -l) -lt 2 ]; then
     >&2 echo "You must make the directory located '~/go' or '/go'."
     exit 1
   fi
-  docker run -tid --rm --name ${NAME} -e CGO_ENABLED=0 -v /tmp:/tmp -v ${host_gopath}:/go local/golang:${GOVERSION}-alpine /bin/ash > /dev/null 2>&1
+  docker run \
+    -tid \
+    --rm \
+    --name ${NAME} \
+    -e CGO_ENABLED=0 \
+    -v /tmp:/tmp \
+    -v ${host_gopath}:/go \
+    -v ~/.netrc:/root/.netrc \
+    -v ~/.gitconfig:/root/.gitconfig \
+    local/golang:${GOVERSION}-alpine \
+    /bin/ash \
+    > /dev/null 2>&1
 fi
+
 user=$(id -u):$(id -g)
 goenv=$(env | grep -e "^GO" -e "^CGO" | sed -e 's/^/-e /')
 cmd="cd $(pwd | sed -e "s,$HOME,,g") && $(basename $0) $@"
