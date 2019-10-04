@@ -39,6 +39,5 @@ fi
 user=$(id -u):$(id -g)
 goenv=$(env | grep -e "^GO" -e "^CGO" | sed -e 's/^/-e /')
 workdir=$(pwd | sed -e "s,$HOME,,g")
-docker_exec="docker exec -i -u ${user} -w ${workdir}"
 cmd="$(basename $0) $@"
-${docker_exec} ${goenv} ${NAME} /bin/ash -c "${cmd}"
+docker exec -i -u ${user} -w ${workdir} ${goenv} ${NAME} /bin/ash -c "${cmd}"
