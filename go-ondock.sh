@@ -41,8 +41,4 @@ goenv=$(env | grep -e "^GO" -e "^CGO" | sed -e 's/^/-e /')
 workdir=$(pwd | sed -e "s,$HOME,,g")
 docker_exec="docker exec -i -u ${user} -w ${workdir}"
 cmd="$(basename $0) $@"
-if [ "${goenv}" = "" ];then
-  ${docker_exec} ${NAME} /bin/ash -c "${cmd}"
-else
-  ${docker_exec} ${goenv} ${NAME} /bin/ash -c "${cmd}"
-fi
+${docker_exec} ${goenv} ${NAME} /bin/ash -c "${cmd}"
